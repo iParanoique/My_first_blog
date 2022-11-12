@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load sidebar %}
+
+{% block title %}{{ post.title }} :: {{ block.super}}{% endblock %}
+
+{% block content %}
+<section class="single-blog-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="border-top">
+                    <div class="col-md-8">
+                        <div class="blog-area">
+                            <div class="blog-area-part">
+                                <h2>{{ post.title }}</h2>
+                                <div>
+                                    <span>
+                                        Category: <a href="{{ post.category.get_absolute_url }}">{{ post.category }}</a>
+                                    </span>
+                                </div>
+                                {% if post.tags.exists %}
+                                <br>
+                                <span>
+                                    Tags:
+                                    {% for tag in post.tags.all %}
+                                    <a href="{{ tag.get_absolute_url }}">{{ tag.title }}</a>
+                                    {% endfor %}
+                                </span>
+                                {% endif %}
+                                <div class="single-content">
+                                    <br>
+                                    {% if post.photo %}
+                                    <img src="{{ post.photo.url }}" alt="{{ post.title }}">
+                                    {% else %}
+                                    <img src="https://picsum.photos/id/1084/300/201/" alt="{{ post.title }}">
+                                    {% endif %}
+                                    {{ post.content|safe }}
+                                </div>
+                            </div>
+                            <div>
+                                <span>Views: {{ post.views }}</span>
+                            </div>
+                            {% if post.id < 3 %}
+                            {% get_comments %}
+                            {% else %}
+                            <div class="commententries">
+                                <h3>Comments</h3>
+
+                                <ul class="commentlist">
+                                    {% for comment in post.comments_title.all %}
+                                    <li>
+                                        <article class="comment">
+                                            <header class="comment-author">
+                                                <img src="img/author-1.jpg" alt="">
+                                            </header>
+                                            <section class="comment-details">
+                                                <div class="author-name">
+                                                    <h5><a href="#">{{ comment.user_name }}</a></h5>
+                                                </div>
+                                                <div class="comment-body">
+                                                    <p>{{ comment.comment_content }}</p>
+                                                </div>
+                                            </section>
+                                        </article>
+                                    </li>
+                                    {% empty %}
+                                    <p>Пока комментов нет</p>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                            {% endif %}
+                            <form action="{% url 'comment' post.id %}" method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-primary">Добавить коммент</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="newsletter">
+                            <h2 class="sidebar-title">Search news</h2>
+                            <form action="{% url 'search' %}" method="get">
+                                <input type="text" name="s" placeholder="Введите название новости...">
+                                </br>
+                                <input type="submit" id="srch" value="Search">
+                            </form>
+                        </div>
+                        {% get_popular 3 %}
+
+                        {% get_tags %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+{% endblock %}

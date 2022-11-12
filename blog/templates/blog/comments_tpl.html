@@ -1,0 +1,26 @@
+<div class="commententries">
+    <h3>Comments</h3>
+
+    <ul class="commentlist">
+        {% for comment in comments %}
+        {% if comment.title_id < 3 %}
+        <li>
+            <article class="comment">
+                <header class="comment-author">
+                    <img src="img/author-1.jpg" alt="">
+                </header>
+                <section class="comment-details">
+                    <div class="author-name">
+                        <h5><a href="#">{{ comment.user_name }}</a></h5>
+                    </div>
+                    <div class="comment-body">
+                        <p>{{ comment.comment_content }}</p>
+                    </div>
+                </section>
+            </article>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+</div>
