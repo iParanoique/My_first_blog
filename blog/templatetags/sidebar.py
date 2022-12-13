@@ -14,9 +14,3 @@ def get_popular(cnt=3):
 def get_tags():
     tags = Tag.objects.all()
     return {"tags": tags}
-
-
-@register.inclusion_tag('blog/comments_tpl.html')
-def get_comments():
-    comments = Comments.objects.all()
-    return {"comments": comments}

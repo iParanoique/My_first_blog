@@ -41,7 +41,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 class CommentsAdmin(admin.ModelAdmin):
-    list_display = ('user_name', 'title')
+    list_display = ('user_name',)
     readonly_fields = ('user_name', 'user_email')
 
 

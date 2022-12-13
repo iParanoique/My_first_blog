@@ -2,6 +2,18 @@ from django.db import models
 from django.urls import reverse
 
 
+class Comments(models.Model):
+    user_name = models.CharField(max_length=100, verbose_name='Автор коммента')
+    user_email = models.EmailField(verbose_name='E-mail')
+    comment_content = models.TextField(verbose_name='Текст коммента')
+    photo = models.ImageField(upload_to='photos/', blank=True, verbose_name='Фото')
+
+
+    class Meta:
+        verbose_name = 'Коммент'
+        verbose_name_plural = 'Комменты'
+
+
 class Category(models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     slug = models.SlugField(max_length=255, verbose_name='URL Категории', unique=True)
@@ -44,6 +56,7 @@ class Post(models.Model):
     views = models.IntegerField(default=0, verbose_name='Просмотры')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts', verbose_name='Категория')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Тег')
+    comments = models.ForeignKey(Comments, on_delete=models.PROTECT, related_name='posts', verbose_name='Коментарий')
 
     def __str__(self):
         return self.title
@@ -55,17 +68,3 @@ class Post(models.Model):
         ordering = ['-created_at']
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
-
-
-class Comments(models.Model):
-    title = models.ForeignKey(Post, on_delete=models.PROTECT, verbose_name='Пост', related_name='comments_title')
-    user_name = models.CharField(max_length=100, verbose_name='Автор коммента')
-    user_email = models.EmailField(verbose_name='E-mail')
-    comment_content = models.TextField(verbose_name='Текст коммента')
-
-    def __str__(self):
-        return str(self.title)
-
-    class Meta:
-        verbose_name = 'Коммент'
-        verbose_name_plural = 'Комменты'
